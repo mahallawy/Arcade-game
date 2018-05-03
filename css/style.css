@@ -1,12 +1,58 @@
 body {
     text-align: center;
 }
-.life {
-  float: left;
-}
+
 .score {
-  text-align: right;
+  text-align: left;
+	height: 80px;
+	margin-bottom: -18%;
+  font-size: 25px;
 }
 .container {
-  width: 505px;
+  max-width: 35%;
+	margin-bottom: -70PX;
 }
+.lives {
+	text-align: right;
+	height: 80px;;
+}
+
+li {
+	list-style: none;
+	display: inline-block;
+}
+
+
+.image {
+	width: 30px;
+}
+/*modal source code: https://codepen.io/bradtraversy/pen/zEOrPp ,
+ *with modifications*/
+
+ .modal{
+   display:none;
+   position: fixed;
+   z-index:1;
+   left: 0;
+   top:0;
+   height: 100%;
+   width:100%;
+   overflow: auto;
+   background-color: rgba(0,0,0,0.5);
+ }
+
+ .modal-content{
+   background-color:#f4f4f4;
+   margin: 20% auto;
+   width:70%;
+   box-shadow: 0 5px 8px 0 rgba(0,0,0,0.2),0 7px 20px 0 rgba(0,0,0,0.17);
+   animation-name:modalopen;
+   animation-duration:1s;
+ }
+
+ .modal-header{
+   text-align: center;
+   background:gray;
+   padding:15px;
+   color:#fff;
+ }
