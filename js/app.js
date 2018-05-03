@@ -1,229 +1,154 @@
-
-let life = 5;
+//variable declaration
 let score = 0;
-//apend the score to the screen and wining
-let LifeDiv = document.querySelector('.life');
-let winDiv = document.querySelector('.score');
-LifeDiv.innerHTML = "You have ( "+life+" ) Lives" ;
-winDiv.innerHTML = "Your score is  "+score;
-
-// set a random position for the bugs on the screen
-var getRandomPosition = function() {
-    var number = Math.floor((Math.random() * 3) + 1);
-    return number;
-};
-// Enemies our player must avoid
-class Enemy {
-    constructor() {
-    // Variables applied to each of our instances go here,
-
-    // we've provided one for you to get started
-    this.x= 0;
-    this.y=((getRandomPosition())*60);
-
-    this.speed= ((getRandomPosition())*70);
-
-    // The image/sprite for our enemies, this uses
-    // a helper we've provided to easily load images
-    this.sprite = 'images/enemy-bug.png';
-}
-
-// Update the enemy's position, required method for game
-// Parameter: dt, a time delta between ticks
-update(dt) {
-    // You should multiply any movement by the dt parameter
-    // which will ensure the game runs at the same speed for
-    // all computers.
-    if(this.x >= 505)
-    {
-        this.x = 0;
-        this.y = (getRandomPosition())*70;
-    }
-    this.x += this.speed * dt;
-}
+let yEnemies = [60, 140, 220, 140, 60, 210];
+let hearts = document.getElementsByTagName('ul')[0];
+let points = document.querySelector('.score');
+points.innerHTML = "Your score is  "+score;
 
 
-// Draw the enemy on the screen, required method for game
-render() {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-}
-}
-// Now write your own player class
-// This class requires an update(), render() and
-// a handleInput() method.
-class Player {
-
-    constructor(){
-        this.sprite='images/char-boy.png';
-        this.x = 200;
-        this.y = 410;
-        this.speed =70;
-        this.win = 0;
-        this.game = true ;
-        this.life = 5 ;
-        this.gemsCollected = 0;
-    }
-    update(dt){
-
-        this.checkBroder();
-        this.checkCollisions();
-        this.checkGameWin();
-        this.checkGameOver();
-
+//superclass Game,from which our Enemy and Player classes inherit some common
+//methods for displaying properly on canvas
+class Game {
+    constructor(x, y, image) {
+        this.x = x;
+        this.y = y;
+        this.image = image;
     }
     render() {
-        ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+        ctx.drawImage(Resources.get(this.image), this.x, this.y);
     }
+}
 
-    // check the player have lives or game is over
-    checkGameOver(){
-        if (this.life == 0)
-        {
-            this.LoseMessage();
-            this.gameReset();
-            this.game = false;
-
-        }
+//Enemy class
+class Enemy extends Game {
+    constructor(x, y, image, speed) {
+        super(x, y, image, speed);
+        this.speed = speed;
     }
-    // set alose message to the screen
-    LoseMessage() {
-        let txt;
-        let person = prompt("Please enter your name:", "Your Name");
-        if (person == null || person == "") {
-            txt = "I hope you enjoyed the game";
+    /*Every time a bug reaches the end of canvas,
+    it starts over from a new random y from
+    yEnemies array with different speed. */
+    update(dt) {
+        let i;
+        if (this.x < 505) {
+            this.x += dt * 15 * this.speed * Math.random();
         } else {
-            txt = "Thank you " + person + "!  for Playing the Game";
+            i = Math.random() * yEnemies.length | 0 + 0;
+            this.y = yEnemies[i];
+            this.x = -100;
         }
-        document.getElementById("message").innerHTML = txt;
-    };
-    // to check if the playes is still have lifes
-    checkGameWin(){
-        if (this.y <=-15)
-        {
-         this.winGame();
+        //checks for collisions
+        /*function for collision detection from
+        https://stackoverflow.com/questions/2440377/javascript-collision-detection
+        based on pythagorean theorem*/
+        let a, b, c;
+        a = this.x - player.x;
+        b = this.y - player.y;
+        c = 70;
+        if (a * a + b * b <= c * c) {
+            player.x = 200;
+            player.y = 380;
+            player.checkLives();
         }
-    }
-// reset the game when the player is game over
-    gameReset(){
-        this.life = 5;
-        this.win = 0;
-        this.game = true;
-        this.reset();
-        LifeDiv.innerHTML = `You have ( ${this.life} ) Lives ` ;
-        winDiv.innerHTML = `You Won ( ${this.win} ) Times  `;
-    }
-    // win the game and add more diffculty to the screen
-    winGame(){
-        this.win +=100 ;
-        winDiv.innerHTML = `Your Score is ${this.win}` ;
-        this.reset();
-        switch (this.win) {
-            case 200:
-            allEnemies.push(new Enemy());
-            break;
-            case 500:
-            allEnemies.push(new Enemy());
-            break;
-            case 800:
-            allEnemies.push(new Enemy());
-            allEnemies.push(new Enemy());
-            break;
-            case 1500:
-            allEnemies.push(new Enemy());
-            allEnemies.push(new Enemy());
-            allEnemies.push(new Enemy());
-            break;
-
-		}
-    }
-    // handle the playe use
-    loseGame(){
-        this.life -= 1;
-        LifeDiv.innerHTML = `You have ( ${this.life} ) Lives ` ;
-    }
-
-
-//handle the input keyboard for the player movment
-    handleInput(action_p){
-
-        if(action_p == 'left')
-        {
-            this.x -= this.speed;
-        }
-        if(action_p == 'right')
-        {
-            this.x += this.speed;
-        }
-
-        if(action_p == 'up')
-        {
-            this.y -= this.speed;
-        }
-        if(action_p == 'down')
-        {
-            this.y += this.speed;
-        }
-
-
-    }
-    // prevent player from being out of canvas
-    checkBroder(){
-        if (this.x < -50 || this.x >= 450 || this.y <-200 || this.y >=450)
-        {
-
-            this.reset();
-        }
-    }
-    // reset the player to his position if reach the edge of canvas
-    reset(){
-        this.x = 200;
-        this.y = 410;
-    }
-
-
-// this method is to chech the player and the enemies and the death
-    checkCollisions(){
-    var len = 	 allEnemies.length;
-    for (var i = 0; i < len; i++) {
-        if ((allEnemies[i].x) <= this.x + 40 &&
-            (allEnemies[i].x + 40) >= (this.x) &&
-            (allEnemies[i].y)<= this.y + 40 &&
-            (allEnemies[i].y + 40) >= (this.y)) {
-            this.loseGame();
-            alert('YOU LOSE');
-            this.reset();
-         }
     }
 
 }
-
-}
-
-// this function is to show the gems to the screen
-
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
-// Place the player object in a variable called player
+let enemy1 = new Enemy(-100, 140, 'images/enemy-bug.png', 50);
+let enemy2 = new Enemy(-100, 60, 'images/enemy-bug.png', 20);
+let enemy3 = new Enemy(-100, 220, 'images/enemy-bug.png', 30);
+let allEnemies = [enemy1, enemy2, enemy3];
 
-let player = new Player();
-let allEnemies = [];
-for (let i = 0; i < 3; i++) {
 
-    allEnemies[i]= new Enemy() ;
+//Player class
+class Player extends Game {
+    constructor(x, y, image, lives) {
+        super(x, y, image, lives);
+        this.lives = lives;
+    }
+    update(dt) {
+        //adds 100 points each time the player reaches the water.If the score reaches 1000 points,
+        //a congratulate modal appears
+        if (this.y < 40) {
+            this.x = 200;
+            this.y = 380;
+            score += 100;
+            points.innerText = "Your score is  "+score;
+            if (score === 1000) {
+                openWinModal();
+            }
+        }
+
+    }
+    //this function is for player's movement using the up,down,left and right keys
+    handleInput(key) {
+        if (key === 'left' && this.x > 0) {
+            this.x -= 100;
+        } else if (key === 'right' && this.x < 400) {
+            this.x += 100;
+        } else if (key === 'up') {
+            this.y -= 80;
+        } else if (key === 'down' && this.y < 380) {
+            this.y += 80;
+        }
+    }
+
+
+    /*function for checking collisions' number in order to remove hearts
+    ,freezes the enemies and opens modal if game is over*/
+    checkLives() {
+        this.lives -= 1;
+        hearts.removeChild(hearts.children[0]);
+        if (this.lives === 0) {
+            allEnemies.forEach(function(enemy) {
+                enemy.speed = 0;
+            });
+            openModal();
+        }
+    }
 
 }
+
+
+
+// Place the player object in a letiable called player
+let player = new Player(200, 380, 'images/char-boy.png', 3);
 
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
 document.addEventListener('keyup', function(e) {
-    var allowedKeys = {
+    let allowedKeys = {
         37: 'left',
         38: 'up',
         39: 'right',
         40: 'down'
     };
-
     player.handleInput(allowedKeys[e.keyCode]);
 });
+
+/**********************************************
+              Modal Code
+              *********************************/
+
+// Get modal element
+let modal = document.getElementById('gameOverModal');
+let winModal = document.getElementById('winningModal');
+// Listen for outside or inside click
+modal.addEventListener('click', modalClick);
+winModal.addEventListener('click', modalClick);
+// Function to open modal
+function openModal() {
+    modal.style.display = 'block';
+}
+
+function openWinModal() {
+    winModal.style.display = 'block';
+}
+// Function to close modal and start new game if outside click
+function modalClick(e) {
+    this.style.display = 'none';
+    location.reload();
+}
