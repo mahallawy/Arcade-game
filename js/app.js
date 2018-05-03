@@ -37,9 +37,7 @@ class Enemy extends Game {
             this.y = yEnemies[i];
             this.x = -100;
         }
-        //checks for collisions
-        /*function for collision detection from
-        https://stackoverflow.com/questions/2440377/javascript-collision-detection
+        /*checks for collisions
         based on pythagorean theorem*/
         let a, b, c;
         a = this.x - player.x;
@@ -57,7 +55,7 @@ class Enemy extends Game {
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 let enemy1 = new Enemy(-100, 140, 'images/enemy-bug.png', 50);
-let enemy2 = new Enemy(-100, 60, 'images/enemy-bug.png', 20);
+let enemy2 = new Enemy(-100, 60, 'images/enemy-bug.png', 40);
 let enemy3 = new Enemy(-100, 220, 'images/enemy-bug.png', 30);
 let allEnemies = [enemy1, enemy2, enemy3];
 
