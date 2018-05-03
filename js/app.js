@@ -121,14 +121,14 @@ class Player {
             case 200:
             allEnemies.push(new Enemy());
             break;
-            case 300:
+            case 500:
             allEnemies.push(new Enemy());
             break;
-            case 400:
+            case 800:
             allEnemies.push(new Enemy());
             allEnemies.push(new Enemy());
             break;
-            case 20:
+            case 1500:
             allEnemies.push(new Enemy());
             allEnemies.push(new Enemy());
             allEnemies.push(new Enemy());
