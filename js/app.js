@@ -114,7 +114,7 @@ class Player extends Game {
 
 
 // Place the player object in a letiable called player
-let player = new Player(200, 380, 'images/char-boy.png', 3);
+let player = new Player(200, 380, 'images/char-horn-girl.png', 3);
 
 
 // This listens for key presses and sends the keys to your
