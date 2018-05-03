@@ -1,11 +1,11 @@
 
 let life = 5;
-let sucess = 0;
+let score = 0;
 //apend the score to the screen and wining
 let LifeDiv = document.querySelector('.life');
-let winDiv = document.querySelector('.sucess');
+let winDiv = document.querySelector('.score');
 LifeDiv.innerHTML = "You have ( "+life+" ) Lives" ;
-winDiv.innerHTML = "You Won ( "+sucess+" ) Times";
+winDiv.innerHTML = "Your score is  "+score;
 
 // set a random position for the bugs on the screen
 var getRandomPosition = function() {
@@ -114,19 +114,17 @@ class Player {
     }
     // win the game and add more diffculty to the screen
     winGame(){
-        this.win +=1 ;
-        winDiv.innerHTML = `You Won ( ${this.win} ) Times  ` ;
-        LifeDiv.innerHTML = `You have ( ${this.life} ) Lives `;
-        alert('YOU WIN');
+        this.win +=100 ;
+        winDiv.innerHTML = `Your Score is ${this.win}` ;
         this.reset();
         switch (this.win) {
-            case 5:
+            case 200:
             allEnemies.push(new Enemy());
             break;
-            case 10:
+            case 300:
             allEnemies.push(new Enemy());
             break;
-            case 15:
+            case 400:
             allEnemies.push(new Enemy());
             allEnemies.push(new Enemy());
             break;
