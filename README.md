@@ -12,6 +12,10 @@ Use keyboard to move left, right, up, down, to move the character and avioid ene
 You have 3 lives to try.
 Each time you cross to the other side your score will increase 100, and to win the game you must achieve 1000 score.
 
+## How to access the game
+Please use this link https://mahallawy.github.io/Arcade-game/ to access the game and enjoy it :) 
+Please note that you can use the game only on computer with keyboard till now :)
+
 
 ## Documentation
  - Used Bootstrap for icons and page gride https://getbootstrap.com/
