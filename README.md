@@ -14,6 +14,7 @@ Each time you cross to the other side your score will increase 100, and to win t
 
 ## How to access the game
 Please use this link https://mahallawy.github.io/Arcade-game/ to access the game and enjoy it :) 
+To load the game locally,download the files double click on index.html to run the game on any browser.
 Please note that you can use the game only on computer with keyboard till now :)
 
 
